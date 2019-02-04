@@ -1,0 +1,160 @@
+﻿using LCCStores.Models;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using System.Web;
+using PusherServer;
+
+namespace LCCStores.Logic
+{
+    public class EntityLogic<T> where T : class, new()
+    {
+
+        Pusher _pusher;
+        public EntityLogic()
+        {
+            var options = new PusherOptions
+            {
+                Cluster = "mt1",
+                Encrypted = true
+            };
+
+            _pusher = new Pusher(
+                "619556",
+                "1e8d9229f9b58c374f76",
+                "d3f1b6b70b528626fbef",
+                options);
+        }
+        protected virtual DbContext GetContext()
+        {
+            return new ApplicationDbContext();
+        }
+
+        public void Insert(T entity)
+        {
+            using (var context = GetContext())
+            {
+                context.Set<T>().Add(entity);
+                context.SaveChanges();
+
+            }
+
+        }
+
+        public virtual void Update(params T[] items)
+        {
+            using (var context = GetContext())
+            {
+                foreach (T item in items)
+                {
+                    context.Entry(item).State = EntityState.Modified;
+                }
+                context.SaveChanges();
+            }
+        }
+
+        public virtual void Delete(params T[] items)
+        {
+            using (var context = GetContext())
+            {
+                foreach (T item in items)
+                {
+                    context.Entry(item).State = EntityState.Deleted;
+                }
+                context.SaveChanges();
+            }
+        }
+
+        public void Save()
+        {
+            var session = GetContext();
+            session.SaveChanges();
+        }
+
+        public List<T> GetList()
+        {
+
+            var list = GetContext().Set<T>().ToList();
+            return list;
+        }
+
+        public virtual List<T> GetAll(params Expression<Func<T, object>>[] navigationProperties)
+        {
+            List<T> list;
+            using (var context = GetContext())
+            {
+                IQueryable<T> dbQuery = context.Set<T>();
+
+                //Apply eager loading
+                dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include<T, object>(navigationProperty));
+
+                list = dbQuery
+                    .AsNoTracking()
+                    .ToList<T>();
+            }
+            return list;
+        }
+
+        public virtual T GetSingle(Func<T, bool> where,
+            params Expression<Func<T, object>>[] navigationProperties)
+        {
+            T item = null;
+            using (var context = GetContext())
+            {
+                IQueryable<T> dbQuery = context.Set<T>();
+
+                //Apply eager loading
+                dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include<T, object>(navigationProperty));
+
+                item = dbQuery
+                    .AsNoTracking() //Don't track any changes for the selected item
+                    .FirstOrDefault(where); //Apply where clause
+            }
+            return item;
+        }
+        public virtual List<T> GetSet(Func<T, bool> where,
+           params Expression<Func<T, object>>[] navigationProperties)
+        {
+            List<T> list;
+            using (var context = GetContext())
+            {
+                IQueryable<T> dbQuery = context.Set<T>();
+
+                //Apply eager loading
+                dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include<T, object>(navigationProperty));
+
+                list = dbQuery
+                    .AsNoTracking()
+                    .Where<T>(where)
+                    .ToList<T>();
+            }
+            return list;
+        }
+
+        public long GetCount()
+        {
+            long count = GetContext().Set<T>().Count();
+            return count;
+        }
+
+        public async Task Pusher(T entity, string title)
+        {
+
+
+            if (entity != null)
+            {
+                var result = await _pusher.TriggerAsync(
+                    "my-" + title + "s",
+                    "new-" + title,
+                    data: entity
+                    );
+            }
+
+
+        }
+
+    }
+}

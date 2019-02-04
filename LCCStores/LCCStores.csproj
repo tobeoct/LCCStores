@@ -45,10 +45,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.1.0\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\net45\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\net45\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="PusherServer, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PusherServer.4.1.0\lib\net45\PusherServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -109,6 +125,9 @@
     <Reference Include="Antlr3.Runtime">
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="WebSocket4Net, Version=0.14.1.0, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -183,18 +202,171 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\MappingProfile.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Configurations\ProductConfiguration.cs" />
+    <Compile Include="Contracts\IAddress.cs" />
+    <Compile Include="Contracts\IAdmin.cs" />
+    <Compile Include="Contracts\IAdminLog.cs" />
+    <Compile Include="Contracts\IBillingInfo.cs" />
+    <Compile Include="Contracts\IBrand.cs" />
+    <Compile Include="Contracts\ICart.cs" />
+    <Compile Include="Contracts\ICartItem.cs" />
+    <Compile Include="Contracts\ICategory.cs" />
+    <Compile Include="Contracts\ICategoryImage.cs" />
+    <Compile Include="Contracts\ICategory_Product.cs" />
+    <Compile Include="Contracts\ICity.cs" />
+    <Compile Include="Contracts\ICountry.cs" />
+    <Compile Include="Contracts\ICourier.cs" />
+    <Compile Include="Contracts\ICreditCard.cs" />
+    <Compile Include="Contracts\ICustomer.cs" />
+    <Compile Include="Contracts\IGenericResponse.cs" />
+    <Compile Include="Contracts\IInformation.cs" />
+    <Compile Include="Contracts\IModDate.cs" />
+    <Compile Include="Contracts\IOrder.cs" />
+    <Compile Include="Contracts\IOrderDetail.cs" />
+    <Compile Include="Contracts\IOrderStatus.cs" />
+    <Compile Include="Contracts\IOrderStatusHistory.cs" />
+    <Compile Include="Contracts\IPayment.cs" />
+    <Compile Include="Contracts\IProductDetail.cs" />
+    <Compile Include="Contracts\IPersonalInfo.cs" />
+    <Compile Include="Contracts\IPhoneNumber.cs" />
+    <Compile Include="Contracts\IProduct.cs" />
+    <Compile Include="Contracts\IProductImage.cs" />
+    <Compile Include="Contracts\IReview.cs" />
+    <Compile Include="Contracts\IReviewDetail.cs" />
+    <Compile Include="Contracts\ISupplier.cs" />
+    <Compile Include="Contracts\ITax.cs" />
+    <Compile Include="Contracts\IUserProfile.cs" />
+    <Compile Include="Contracts\IWishList.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CartsController.cs" />
+    <Compile Include="Controllers\CouriersController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="DTO\ProductDto.cs" />
+    <Compile Include="DTO\ProductImageDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\Enums.cs" />
+    <Compile Include="Helper\Response.cs" />
+    <Compile Include="Logic\EntityLogic.cs" />
+    <Compile Include="Migrations\201902031159204_InitialMigration.cs" />
+    <Compile Include="Migrations\201902031159204_InitialMigration.Designer.cs">
+      <DependentUpon>201902031159204_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031200109_AddProductImagesToDb.cs" />
+    <Compile Include="Migrations\201902031200109_AddProductImagesToDb.Designer.cs">
+      <DependentUpon>201902031200109_AddProductImagesToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031204147_AddProductDetailsToDb.cs" />
+    <Compile Include="Migrations\201902031204147_AddProductDetailsToDb.Designer.cs">
+      <DependentUpon>201902031204147_AddProductDetailsToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031204527_AddTaxesToDb.cs" />
+    <Compile Include="Migrations\201902031204527_AddTaxesToDb.Designer.cs">
+      <DependentUpon>201902031204527_AddTaxesToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031205481_AddPhoneNumbersToDb.cs" />
+    <Compile Include="Migrations\201902031205481_AddPhoneNumbersToDb.Designer.cs">
+      <DependentUpon>201902031205481_AddPhoneNumbersToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031206252_AddAddressesToDb.cs" />
+    <Compile Include="Migrations\201902031206252_AddAddressesToDb.Designer.cs">
+      <DependentUpon>201902031206252_AddAddressesToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031207514_AddCityToDb.cs" />
+    <Compile Include="Migrations\201902031207514_AddCityToDb.Designer.cs">
+      <DependentUpon>201902031207514_AddCityToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031208238_AddCityToDbAgain.cs" />
+    <Compile Include="Migrations\201902031208238_AddCityToDbAgain.Designer.cs">
+      <DependentUpon>201902031208238_AddCityToDbAgain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031209143_AddCityToDbAgain1.cs" />
+    <Compile Include="Migrations\201902031209143_AddCityToDbAgain1.Designer.cs">
+      <DependentUpon>201902031209143_AddCityToDbAgain1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031210212_AddCityToDbAgain2.cs" />
+    <Compile Include="Migrations\201902031210212_AddCityToDbAgain2.Designer.cs">
+      <DependentUpon>201902031210212_AddCityToDbAgain2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031210528_AddCountryToDb.cs" />
+    <Compile Include="Migrations\201902031210528_AddCountryToDb.Designer.cs">
+      <DependentUpon>201902031210528_AddCountryToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031211226_AddAddressesToDb1.cs" />
+    <Compile Include="Migrations\201902031211226_AddAddressesToDb1.Designer.cs">
+      <DependentUpon>201902031211226_AddAddressesToDb1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031212326_AddAdminsToDb.cs" />
+    <Compile Include="Migrations\201902031212326_AddAdminsToDb.Designer.cs">
+      <DependentUpon>201902031212326_AddAdminsToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031213147_AddBrandsToDb.cs" />
+    <Compile Include="Migrations\201902031213147_AddBrandsToDb.Designer.cs">
+      <DependentUpon>201902031213147_AddBrandsToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031213493_AddProductImagesToDb1.cs" />
+    <Compile Include="Migrations\201902031213493_AddProductImagesToDb1.Designer.cs">
+      <DependentUpon>201902031213493_AddProductImagesToDb1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031214333_AddProductImagesToDb2.cs" />
+    <Compile Include="Migrations\201902031214333_AddProductImagesToDb2.Designer.cs">
+      <DependentUpon>201902031214333_AddProductImagesToDb2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031215505_AddProductsToDb.cs" />
+    <Compile Include="Migrations\201902031215505_AddProductsToDb.Designer.cs">
+      <DependentUpon>201902031215505_AddProductsToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902031217309_AddProductImagesToDb3.cs" />
+    <Compile Include="Migrations\201902031217309_AddProductImagesToDb3.Designer.cs">
+      <DependentUpon>201902031217309_AddProductImagesToDb3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Admin.cs" />
+    <Compile Include="Models\BillingInfo.cs" />
+    <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\Cart.cs" />
+    <Compile Include="Models\CartItem.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\CategoryImage.cs" />
+    <Compile Include="Models\Category_Product.cs" />
+    <Compile Include="Models\City.cs" />
+    <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\AdminLog.cs" />
+    <Compile Include="Models\Courier.cs" />
+    <Compile Include="Models\CreditCard.cs" />
+    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\GenericResponse.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Information.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ModDate.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderDetail.cs" />
+    <Compile Include="Models\OrderStatus.cs" />
+    <Compile Include="Models\OrderStatusHistory.cs" />
+    <Compile Include="Models\Payment.cs" />
+    <Compile Include="Models\PersonalInfo.cs" />
+    <Compile Include="Models\PhoneNumber.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductDetail.cs" />
+    <Compile Include="Models\ProductImage.cs" />
+    <Compile Include="Models\Review.cs" />
+    <Compile Include="Models\ReviewDetail.cs" />
+    <Compile Include="Models\Supplier.cs" />
+    <Compile Include="Models\Tax.cs" />
+    <Compile Include="Models\UserProfile.cs" />
+    <Compile Include="Models\WishList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -271,6 +443,62 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201902031159204_InitialMigration.resx">
+      <DependentUpon>201902031159204_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031200109_AddProductImagesToDb.resx">
+      <DependentUpon>201902031200109_AddProductImagesToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031204147_AddProductDetailsToDb.resx">
+      <DependentUpon>201902031204147_AddProductDetailsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031204527_AddTaxesToDb.resx">
+      <DependentUpon>201902031204527_AddTaxesToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031205481_AddPhoneNumbersToDb.resx">
+      <DependentUpon>201902031205481_AddPhoneNumbersToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031206252_AddAddressesToDb.resx">
+      <DependentUpon>201902031206252_AddAddressesToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031207514_AddCityToDb.resx">
+      <DependentUpon>201902031207514_AddCityToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031208238_AddCityToDbAgain.resx">
+      <DependentUpon>201902031208238_AddCityToDbAgain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031209143_AddCityToDbAgain1.resx">
+      <DependentUpon>201902031209143_AddCityToDbAgain1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031210212_AddCityToDbAgain2.resx">
+      <DependentUpon>201902031210212_AddCityToDbAgain2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031210528_AddCountryToDb.resx">
+      <DependentUpon>201902031210528_AddCountryToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031211226_AddAddressesToDb1.resx">
+      <DependentUpon>201902031211226_AddAddressesToDb1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031212326_AddAdminsToDb.resx">
+      <DependentUpon>201902031212326_AddAdminsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031213147_AddBrandsToDb.resx">
+      <DependentUpon>201902031213147_AddBrandsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031213493_AddProductImagesToDb1.resx">
+      <DependentUpon>201902031213493_AddProductImagesToDb1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031214333_AddProductImagesToDb2.resx">
+      <DependentUpon>201902031214333_AddProductImagesToDb2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031215505_AddProductsToDb.resx">
+      <DependentUpon>201902031215505_AddProductsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031217309_AddProductImagesToDb3.resx">
+      <DependentUpon>201902031217309_AddProductImagesToDb3.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -304,6 +532,11 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
