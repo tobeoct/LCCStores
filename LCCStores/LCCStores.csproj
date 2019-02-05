@@ -206,6 +206,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Configurations\BrandConfiguration.cs" />
     <Compile Include="Configurations\ProductConfiguration.cs" />
     <Compile Include="Contracts\IAddress.cs" />
     <Compile Include="Contracts\IAdmin.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="Contracts\IPhoneNumber.cs" />
     <Compile Include="Contracts\IProduct.cs" />
     <Compile Include="Contracts\IProductImage.cs" />
+    <Compile Include="Contracts\IUpdates.cs" />
     <Compile Include="Contracts\IReview.cs" />
     <Compile Include="Contracts\IReviewDetail.cs" />
     <Compile Include="Contracts\ISupplier.cs" />
@@ -242,6 +244,7 @@
     <Compile Include="Contracts\IUserProfile.cs" />
     <Compile Include="Contracts\IWishList.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\CouriersController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
@@ -254,8 +257,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\Cacher.cs" />
     <Compile Include="Helper\Enums.cs" />
     <Compile Include="Helper\Response.cs" />
+    <Compile Include="Helper\Updates.cs" />
+    <Compile Include="Helper\Validations.cs" />
     <Compile Include="Logic\EntityLogic.cs" />
     <Compile Include="Migrations\201902031159204_InitialMigration.cs" />
     <Compile Include="Migrations\201902031159204_InitialMigration.Designer.cs">
@@ -329,12 +335,21 @@
     <Compile Include="Migrations\201902031217309_AddProductImagesToDb3.Designer.cs">
       <DependentUpon>201902031217309_AddProductImagesToDb3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902041432473_AddProductUpdatesToDb.cs" />
+    <Compile Include="Migrations\201902041432473_AddProductUpdatesToDb.Designer.cs">
+      <DependentUpon>201902041432473_AddProductUpdatesToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902051103009_AddBrandUpdatesToDb.cs" />
+    <Compile Include="Migrations\201902051103009_AddBrandUpdatesToDb.Designer.cs">
+      <DependentUpon>201902051103009_AddBrandUpdatesToDb.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\BillingInfo.cs" />
     <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\BrandUpdate.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\Category.cs" />
@@ -348,6 +363,7 @@
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\GenericResponse.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Index.cs" />
     <Compile Include="Models\Information.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ModDate.cs" />
@@ -361,6 +377,7 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductDetail.cs" />
     <Compile Include="Models\ProductImage.cs" />
+    <Compile Include="Models\ProductUpdate.cs" />
     <Compile Include="Models\Review.cs" />
     <Compile Include="Models\ReviewDetail.cs" />
     <Compile Include="Models\Supplier.cs" />
@@ -497,6 +514,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902031217309_AddProductImagesToDb3.resx">
       <DependentUpon>201902031217309_AddProductImagesToDb3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902041432473_AddProductUpdatesToDb.resx">
+      <DependentUpon>201902041432473_AddProductUpdatesToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902051103009_AddBrandUpdatesToDb.resx">
+      <DependentUpon>201902051103009_AddBrandUpdatesToDb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

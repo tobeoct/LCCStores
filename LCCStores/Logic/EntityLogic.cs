@@ -91,8 +91,52 @@ namespace LCCStores.Logic
                 //Apply eager loading
                 dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include<T, object>(navigationProperty));
 
+                list = dbQuery//.Take(20)
+                    .AsNoTracking()
+                    .ToList<T>();
+            }
+            return list;
+        }
+        public virtual List<T> GetN(int pageNumber, Func<T, bool> where, params Expression<Func<T, object>>[] navigationProperties)
+        {
+            List<T> list;
+            pageNumber = 20+(pageNumber * 10);
+            using (var context = GetContext())
+            {
+                IQueryable<T> dbQuery = context.Set<T>();
+
+                //Apply eager loading
+                dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include<T, object>(navigationProperty));
+
+               
+                   
+                if(where!=null)
+                {
+                    list = dbQuery.Take(pageNumber)
+                   .AsNoTracking().Where<T>(where).ToList<T>();
+                    return list;
+                }
+                list = dbQuery.Take(pageNumber)
+               .AsNoTracking().ToList<T>();
+               
+            }
+            return list;
+        }
+
+        public virtual List<T> GetWhere(Func<T, bool> where,
+        params Expression<Func<T, object>>[] navigationProperties)
+        {
+            List<T> list;
+            using (var context = GetContext())
+            {
+                IQueryable<T> dbQuery = context.Set<T>();
+
+                //Apply eager loading
+                dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include<T, object>(navigationProperty));
+
                 list = dbQuery
                     .AsNoTracking()
+                    .Where<T>(where)
                     .ToList<T>();
             }
             return list;
@@ -115,24 +159,8 @@ namespace LCCStores.Logic
             }
             return item;
         }
-        public virtual List<T> GetSet(Func<T, bool> where,
-           params Expression<Func<T, object>>[] navigationProperties)
-        {
-            List<T> list;
-            using (var context = GetContext())
-            {
-                IQueryable<T> dbQuery = context.Set<T>();
 
-                //Apply eager loading
-                dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include<T, object>(navigationProperty));
-
-                list = dbQuery
-                    .AsNoTracking()
-                    .Where<T>(where)
-                    .ToList<T>();
-            }
-            return list;
-        }
+     
 
         public long GetCount()
         {

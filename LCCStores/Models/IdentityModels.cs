@@ -30,6 +30,8 @@ namespace LCCStores.Models
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Tax> Taxes { get; set; }
         public DbSet<ProductDetail> ProductDetails { get; set; }
+        public DbSet<ProductUpdate> ProductUpdates { get; set; }
+        public DbSet<BrandUpdate> BrandUpdates { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
