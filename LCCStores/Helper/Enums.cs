@@ -11,8 +11,9 @@ namespace LCCStores.Helper
     }
     public enum StatusCode
     {
-        Success = 0,
-        Failure = 1
+        Success = 00,
+        NoExisting=01,
+        Failure = 99
     }
     public enum Actions
     {
@@ -21,5 +22,27 @@ namespace LCCStores.Helper
         Edit = 2,
         Delete=3
        
+    }
+    public enum OrderStatus
+    {
+        Placed=0,
+       InDelivery=1,
+       Delivered=2,
+       Cancelled=3
+
+    }
+    public enum ShipVia
+    {
+        Bike=0,
+        Car=1,
+        Bus=2
+
+    }
+    public enum PaymentType
+    {
+        MasterCard = 0,
+        Visa = 1,
+        Verve = 2
+
     }
 }

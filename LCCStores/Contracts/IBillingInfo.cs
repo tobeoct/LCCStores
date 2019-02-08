@@ -10,9 +10,10 @@ namespace LCCStores.Contracts
     public interface IBillingInfo
     {
         int Id { get; set; }
-        int CreditCardId { get; set; }
-        CreditCard CreditCard { get; set; }
-        string Address { get; set; }
         DateTime Date { get; set; }
+        int AddressId { get; set; }
+        Address Address { get; set; }
+        int PhoneNumberId { get; set; }
+        PhoneNumber PhoneNumber { get; set; }
     }
 }

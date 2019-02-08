@@ -16,7 +16,7 @@ namespace LCCStores.Contracts
         Product Product { get; set; }
         decimal UnitPrice { get; set; }
         int Quantity { get; set; }
-        int OrderNumber { get; set; }
+        Guid OrderNumber { get; set; }
         decimal Discount { get; set; }
     }
 }

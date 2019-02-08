@@ -14,7 +14,7 @@ namespace LCCStores.Models
         public int ProductId {get; set; }
         public decimal UnitPrice {get; set; }
         public int Quantity {get; set; }
-        public int OrderNumber {get; set; }
+        public Guid OrderNumber {get; set; }
         public decimal Discount {get; set; }
         public Order Order {get; set; }
         public Product Product {get; set; }

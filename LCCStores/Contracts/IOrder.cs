@@ -1,4 +1,5 @@
-﻿using LCCStores.Models;
+﻿using LCCStores.Helper;
+using LCCStores.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,17 +13,16 @@ namespace LCCStores.Contracts
         int Id { get; set; }
         int CustomerId { get; set; }
         Customer Customer { get; set; } 
-        int OrderNumber { get; set; }
+        Guid OrderNumber { get; set; }
         DateTime OrderDate { get; set; }
         DateTime DeliveryDate { get; set; }
-        DateTime ShippedDate { get; set; }
-        string ShipVia { get; set; }
-        int CourierId { get; set; }
+        DateTime? ShippedDate { get; set; }
+        ShipVia ShipVia { get; set; }
+        int? CourierId { get; set; }
         Courier Courier { get; set; }
         decimal Freight { get; set; }
         int BillingInfoId { get; set; }
-        BillingInfo BillingInfo { get; set; }
-        int OrderStatusId { get; set; }
+        BillingInformation BillingInfo { get; set; }
         OrderStatus OrderStatus { get; set; }
     }
 }

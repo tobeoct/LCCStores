@@ -33,7 +33,10 @@ namespace LCCStores.Helper
             {
                 if (property.PropertyType == typeof(string))//&& property.GetValue(product) != null)
                 {
-                    ProcessString(property.GetValue(data).ToString(), property.Name);
+                    if (!property.Name.Equals("Email"))
+                    {
+                        ProcessString(property.GetValue(data).ToString(), property.Name);
+                    }
                 }
                 if (property.PropertyType == typeof(int))//&& property.GetValue(product) != null)
                 {

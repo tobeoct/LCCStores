@@ -60,5 +60,57 @@ namespace LCCStores.Helper
 
         }
 
+        public bool CustomersUpdate()
+        {
+            try
+            {
+                var _logic = new EntityLogic<CustomerUpdate>();
+                var updateTime = _logic.GetSingle(c => c.Id == 1);
+                if (updateTime != null)
+                {
+                    updateTime.LastUpdateTime = DateTime.Now;
+                    _logic.Update(updateTime);
+                    return true;
+                }
+                var upTime = new CustomerUpdate()
+                {
+                    LastUpdateTime = DateTime.Now
+                };
+                _logic.Insert(upTime);
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+        public bool CartsUpdate()
+        {
+            try
+            {
+                var _logic = new EntityLogic<CartUpdate>();
+                var updateTime = _logic.GetSingle(c => c.Id == 1);
+                if (updateTime != null)
+                {
+                    updateTime.LastUpdateTime = DateTime.Now;
+                    _logic.Update(updateTime);
+                    return true;
+                }
+                var upTime = new CartUpdate()
+                {
+                    LastUpdateTime = DateTime.Now
+                };
+                _logic.Insert(upTime);
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
     }
 }

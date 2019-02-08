@@ -13,8 +13,8 @@ namespace LCCStores.Contracts
         string FirstName { get; set; }
         string LastName { get; set; }
         int PersonalInfoId { get; set; }
-        PersonalInfo PersonalInfo { get; set; }
-        int BillingInfoId { get; set; }
-        BillingInfo BillingInfo { get; set; }
+        PersonalInformation PersonalInfo { get; set; }
+        int? BillingInfoId { get; set; }
+        BillingInformation BillingInfo { get; set; }
     }
 }

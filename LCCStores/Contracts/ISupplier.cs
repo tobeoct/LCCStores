@@ -11,7 +11,7 @@ namespace LCCStores.Contracts
     {
         int Id { get; set; }
         int PersonalInfoId { get; set; }
-        PersonalInfo PersonalInfo { get; set; }
+        PersonalInformation PersonalInfo { get; set; }
         string CompanyName { get; set; }
         string FirstName { get; set; }
         string LastName { get; set; }

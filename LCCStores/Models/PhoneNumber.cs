@@ -10,7 +10,7 @@ namespace LCCStores.Models
     public class PhoneNumber : IPhoneNumber
     {
         public int Id {get; set; }
-        public int PhoneNumber1 {get; set; }
-        public int PhoneNumber2 {get; set; }
+        public string NumberOne {get; set; }
+        public string NumberTwo {get; set; }
     }
 }

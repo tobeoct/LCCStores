@@ -1,4 +1,5 @@
-﻿using LCCStores.Models;
+﻿using LCCStores.Helper;
+using LCCStores.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,14 @@ namespace LCCStores.Contracts
     public interface IPayment
     {
         int Id { get; set; }
-        string Type { get; set; }
+        PaymentType Type { get; set; }
         int OrderId { get; set; }
         Order Order { get; set; }
         int CustomerId { get; set; }
         Customer Customer { get; set; }
         int BillingInfoId { get; set; }
-        BillingInfo BillingInfo { get; set; }
+        BillingInformation BillingInfo { get; set; }
         DateTime Date { get; set; }
+        Guid PaymentReference { get; set; }
     }
 }

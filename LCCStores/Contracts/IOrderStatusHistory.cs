@@ -1,4 +1,5 @@
-﻿using LCCStores.Models;
+﻿using LCCStores.Helper;
+using LCCStores.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace LCCStores.Contracts
         int Id { get; set; }
         int OrderId { get; set; }
         Order Order { get; set; }
-        int OrderStatusId{ get; set; }
         OrderStatus OrderStatus { get; set; }
-        int UserId { get; set; }
+        int? UserId { get; set; }
+        UserProfile User { get; set; }
         DateTime Date { get; set; }
     }
 }

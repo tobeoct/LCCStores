@@ -12,8 +12,8 @@ namespace LCCStores.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int PersonalInfoId { get; set; }
-        public int BillingInfoId { get; set; }
-        public PersonalInfo PersonalInfo { get; set; }
-        public BillingInfo BillingInfo { get; set; }
+        public int? BillingInfoId { get; set; }
+        public PersonalInformation PersonalInfo { get; set; }
+        public BillingInformation BillingInfo { get; set; }
     }
 }

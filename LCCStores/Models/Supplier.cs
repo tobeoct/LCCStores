@@ -14,7 +14,7 @@ namespace LCCStores.Models
         public string FirstName { get; set;}
         public string LastName { get; set;}
      
-        public PersonalInfo PersonalInfo { get; set;}
+        public PersonalInformation PersonalInfo { get; set;}
         public int AddedById { get; set;}
         public Admin AddedBy { get; set;}
     }

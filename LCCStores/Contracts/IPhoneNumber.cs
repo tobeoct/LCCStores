@@ -9,7 +9,7 @@ namespace LCCStores.Contracts
     public interface IPhoneNumber
     {
         int Id { get; set; }
-        int PhoneNumber1 { get; set; }
-        int PhoneNumber2 { get; set; }
+        string NumberOne { get; set; }
+        string NumberTwo { get; set; }
     }
 }

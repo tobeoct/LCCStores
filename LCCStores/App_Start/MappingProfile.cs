@@ -10,26 +10,26 @@ namespace LCCStores.App_Start
 {
     public class MappingProfile : Profile
 
+    {
+        public MappingProfile()
         {
-            public MappingProfile()
-            {
 
-                //            Map Model to Dto
-                Mapper.CreateMap<Product, ProductDto>();
-               
+            //            Map Model to Dto
+            Mapper.CreateMap<Product, ProductDto>();
+            Mapper.CreateMap<Customer, CustomerDto>();
 
-                // Map Dto to Model
-                Mapper.CreateMap<ProductDto, Product>();
-                
+            // Map Dto to Model
+            Mapper.CreateMap<ProductDto, Product>();
+            Mapper.CreateMap<CustomerDto, Customer>();
 
-                //Map Model to ViewModel
-               // Mapper.CreateMap<GLCategory, GLCategoryViewModel>();
+            //Map Model to ViewModel
+            // Mapper.CreateMap<GLCategory, GLCategoryViewModel>();
 
-                //Map ViewModel to Model
-               // Mapper.CreateMap<GLCategoryViewModel, GLCategory>();
+            //Map ViewModel to Model
+            // Mapper.CreateMap<GLCategoryViewModel, GLCategory>();
 
-
-            }
 
         }
+
     }
+}

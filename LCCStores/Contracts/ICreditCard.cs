@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LCCStores.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,7 @@ namespace LCCStores.Contracts
         string Pin { get; set; }
         string CVV { get; set; }
         string ExpiryDate { get; set; }
+        int BillingInfoId { get; set; }
+        BillingInformation BillingInfo { get; set; }
     }
 }

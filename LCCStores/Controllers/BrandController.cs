@@ -42,7 +42,7 @@ namespace LCCStores.Controllers
         public HttpResponseMessage GetAllBrands()
         {
             var genericResponse = new GenericResponse();
-            var productKey = $"TotalBrands";
+            var brandKey = $"TotalBrands";
 
             var brands = new RBrands();
             try
@@ -50,20 +50,23 @@ namespace LCCStores.Controllers
 
                 Trace.TraceInformation("Getting all Brands");
 
-                var updateTime = new EntityLogic<ProductUpdate>().GetSingle(c => c.Id == 1).LastUpdateTime;
-                if (updateTime < DateTime.Now)
+                var updateTime = new EntityLogic<BrandUpdate>().GetSingle(c => c.Id == 1).LastUpdateTime;
+                if (updateTime != null)
                 {
-                    brands = (RBrands)new Cacher().GetCache(productKey);
-                    if (brands != null)
+                    if (updateTime < DateTime.Now)
                     {
-                        genericResponse = new Response().GenerateResponse(true, "Successfully gotten all brands", brands);
+                        brands.Brands = (List<Brand>)new Cacher().GetCache(brandKey);
+                        if (brands.Brands != null)
+                        {
+                            genericResponse = new Response().GenerateResponse(true, "Successfully gotten all brands", brands);
 
-                        Trace.TraceInformation("Sending all Brands");
+                            Trace.TraceInformation("Sending all Brands");
 
-                        return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(genericResponse));
+                            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(genericResponse));
+                        }
                     }
-                }
 
+                }
                 var allBrands = _entityLogic.GetAll(c => c.AddedBy).OrderByDescending(c => c.Id).ToList();
 
                 genericResponse = new Response().GenerateResponse(true, "Successfully gotten all brands", allBrands);
@@ -71,7 +74,7 @@ namespace LCCStores.Controllers
                 Trace.TraceInformation("Sending all Brands");
 
                 //Cache Products
-                new Cacher().InsertIntoCache(productKey, allBrands);
+                new Cacher().InsertIntoCache(brandKey, allBrands);
                 return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(genericResponse));
             }
             catch (Exception e)
@@ -131,7 +134,7 @@ namespace LCCStores.Controllers
             try
             {
 
-                Trace.TraceInformation("Saving Product");
+                Trace.TraceInformation("Saving Brand");
 
                 //VALIDATING PRODUCT DETAILS
                 ValidateBrand(brand, Actions.Create);
@@ -144,7 +147,7 @@ namespace LCCStores.Controllers
                 };
 
                 //SAVE BRAND TO DB
-                Trace.TraceInformation("Saving Product to DB");
+                Trace.TraceInformation("Saving Brand to DB");
                 _entityLogic.Insert(brand);
                 _entityLogic.Save();
                 new Updates().BrandsUpdate();
@@ -172,7 +175,7 @@ namespace LCCStores.Controllers
         [AcceptVerbs("PUT")]
         [HttpPut]
         [Route("api/Brand/EditBrand")]
-        public HttpResponseMessage EditProduct(Brand brand)
+        public HttpResponseMessage EditBrand(Brand brand)
         {
 
             var genericResponse = new GenericResponse();

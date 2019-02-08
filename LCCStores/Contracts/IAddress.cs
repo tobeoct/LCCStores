@@ -14,5 +14,6 @@ namespace LCCStores.Contracts
         int CountryId { get; set; }
         Country Country { get; set; }
         int CityId { get; set; }
+        City City { get; set; }
     }
 }

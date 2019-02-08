@@ -6,11 +6,9 @@ using System.Web;
 
 namespace LCCStores.Models
 {
-    public class PersonalInfo : IPersonalInfo
+    public class CartUpdate : IUpdates
     {
         public int Id { get; set; }
-        public string Email { get; set; }
-        public string PostalCode { get; set; }
-        public string AddressId { get; set; }
+        public DateTime LastUpdateTime { get; set; }
     }
 }

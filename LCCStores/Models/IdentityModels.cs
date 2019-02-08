@@ -32,6 +32,22 @@ namespace LCCStores.Models
         public DbSet<ProductDetail> ProductDetails { get; set; }
         public DbSet<ProductUpdate> ProductUpdates { get; set; }
         public DbSet<BrandUpdate> BrandUpdates { get; set; }
+        public DbSet<CustomerUpdate> CustomerUpdates { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<PersonalInformation> PersonalInformation { get; set; }
+        public DbSet<CreditCard> CreditCards { get; set; }
+        public DbSet<BillingInformation> BillingInformation { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<CartUpdate> CartUpdates { get; set; }
+        public DbSet<Courier> Couriers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderStatusHistory> OrderStatusHistorys { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

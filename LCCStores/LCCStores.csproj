@@ -18,7 +18,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -54,6 +55,9 @@
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\net45\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="PayPal, Version=1.9.1.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPal.1.9.1\lib\net451\PayPal.dll</HintPath>
     </Reference>
     <Reference Include="PusherServer, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PusherServer.4.1.0\lib\net45\PusherServer.dll</HintPath>
@@ -206,8 +210,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Configurations\CustomerConfiguration.cs" />
     <Compile Include="Configurations\BrandConfiguration.cs" />
     <Compile Include="Configurations\ProductConfiguration.cs" />
+    <Compile Include="Contracts\IFAQ.cs" />
     <Compile Include="Contracts\IAddress.cs" />
     <Compile Include="Contracts\IAdmin.cs" />
     <Compile Include="Contracts\IAdminLog.cs" />
@@ -228,7 +234,6 @@
     <Compile Include="Contracts\IModDate.cs" />
     <Compile Include="Contracts\IOrder.cs" />
     <Compile Include="Contracts\IOrderDetail.cs" />
-    <Compile Include="Contracts\IOrderStatus.cs" />
     <Compile Include="Contracts\IOrderStatusHistory.cs" />
     <Compile Include="Contracts\IPayment.cs" />
     <Compile Include="Contracts\IProductDetail.cs" />
@@ -244,21 +249,25 @@
     <Compile Include="Contracts\IUserProfile.cs" />
     <Compile Include="Contracts\IWishList.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BillingController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
-    <Compile Include="Controllers\CartsController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CouriersController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="DTO\CustomerDto.cs" />
     <Compile Include="DTO\ProductDto.cs" />
     <Compile Include="DTO\ProductImageDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\ApiPostAndGet.cs" />
     <Compile Include="Helper\Cacher.cs" />
     <Compile Include="Helper\Enums.cs" />
+    <Compile Include="Helper\HttpConnectionManager.cs" />
     <Compile Include="Helper\Response.cs" />
     <Compile Include="Helper\Updates.cs" />
     <Compile Include="Helper\Validations.cs" />
@@ -343,15 +352,104 @@
     <Compile Include="Migrations\201902051103009_AddBrandUpdatesToDb.Designer.cs">
       <DependentUpon>201902051103009_AddBrandUpdatesToDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902051512085_AddPersonalInfoToDb.cs" />
+    <Compile Include="Migrations\201902051512085_AddPersonalInfoToDb.Designer.cs">
+      <DependentUpon>201902051512085_AddPersonalInfoToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902060613364_AddCreditCardsToDb.cs" />
+    <Compile Include="Migrations\201902060613364_AddCreditCardsToDb.Designer.cs">
+      <DependentUpon>201902060613364_AddCreditCardsToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902060614535_AddBillingInfosToDb.cs" />
+    <Compile Include="Migrations\201902060614535_AddBillingInfosToDb.Designer.cs">
+      <DependentUpon>201902060614535_AddBillingInfosToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902060619005_RefactorBillingInfosAndCreditCardsInDb.cs" />
+    <Compile Include="Migrations\201902060619005_RefactorBillingInfosAndCreditCardsInDb.Designer.cs">
+      <DependentUpon>201902060619005_RefactorBillingInfosAndCreditCardsInDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902060622027_AddCustomersAndUpdatesToDb.cs" />
+    <Compile Include="Migrations\201902060622027_AddCustomersAndUpdatesToDb.Designer.cs">
+      <DependentUpon>201902060622027_AddCustomersAndUpdatesToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902060706123_AddSuppliersToDb.cs" />
+    <Compile Include="Migrations\201902060706123_AddSuppliersToDb.Designer.cs">
+      <DependentUpon>201902060706123_AddSuppliersToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902060708484_AddUserProfilesToDb.cs" />
+    <Compile Include="Migrations\201902060708484_AddUserProfilesToDb.Designer.cs">
+      <DependentUpon>201902060708484_AddUserProfilesToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902060807144_RefactorCustomersInDb.cs" />
+    <Compile Include="Migrations\201902060807144_RefactorCustomersInDb.Designer.cs">
+      <DependentUpon>201902060807144_RefactorCustomersInDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902061920597_EmptyMigration.cs" />
+    <Compile Include="Migrations\201902061920597_EmptyMigration.Designer.cs">
+      <DependentUpon>201902061920597_EmptyMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902061921446_RenameBillingInfoInDb.cs" />
+    <Compile Include="Migrations\201902061921446_RenameBillingInfoInDb.Designer.cs">
+      <DependentUpon>201902061921446_RenameBillingInfoInDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902061934090_RenameTables.cs" />
+    <Compile Include="Migrations\201902061934090_RenameTables.Designer.cs">
+      <DependentUpon>201902061934090_RenameTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902062048570_RenameTables2.cs" />
+    <Compile Include="Migrations\201902062048570_RenameTables2.Designer.cs">
+      <DependentUpon>201902062048570_RenameTables2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902070649397_RenamePhoneNumberProperties.cs" />
+    <Compile Include="Migrations\201902070649397_RenamePhoneNumberProperties.Designer.cs">
+      <DependentUpon>201902070649397_RenamePhoneNumberProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902070653420_RefactorPhoneNumberPropertyType.cs" />
+    <Compile Include="Migrations\201902070653420_RefactorPhoneNumberPropertyType.Designer.cs">
+      <DependentUpon>201902070653420_RefactorPhoneNumberPropertyType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902070834269_AddCartToDb.cs" />
+    <Compile Include="Migrations\201902070834269_AddCartToDb.Designer.cs">
+      <DependentUpon>201902070834269_AddCartToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902070842015_AddCartItemsToDb.cs" />
+    <Compile Include="Migrations\201902070842015_AddCartItemsToDb.Designer.cs">
+      <DependentUpon>201902070842015_AddCartItemsToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902071549305_AddCartUpdateToDb.cs" />
+    <Compile Include="Migrations\201902071549305_AddCartUpdateToDb.Designer.cs">
+      <DependentUpon>201902071549305_AddCartUpdateToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902081046149_AddCourierToDb.cs" />
+    <Compile Include="Migrations\201902081046149_AddCourierToDb.Designer.cs">
+      <DependentUpon>201902081046149_AddCourierToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902081047169_AddOrderToDb.cs" />
+    <Compile Include="Migrations\201902081047169_AddOrderToDb.Designer.cs">
+      <DependentUpon>201902081047169_AddOrderToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902081048291_AddOrderDetailsToDb.cs" />
+    <Compile Include="Migrations\201902081048291_AddOrderDetailsToDb.Designer.cs">
+      <DependentUpon>201902081048291_AddOrderDetailsToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902081051067_AddOrderStatusHistoryToDb.cs" />
+    <Compile Include="Migrations\201902081051067_AddOrderStatusHistoryToDb.Designer.cs">
+      <DependentUpon>201902081051067_AddOrderStatusHistoryToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902081155071_AddPaymentToDb.cs" />
+    <Compile Include="Migrations\201902081155071_AddPaymentToDb.Designer.cs">
+      <DependentUpon>201902081155071_AddPaymentToDb.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Admin.cs" />
-    <Compile Include="Models\BillingInfo.cs" />
+    <Compile Include="Models\BillingInformation.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\BrandUpdate.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CartItem.cs" />
+    <Compile Include="Models\CartUpdate.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CategoryImage.cs" />
     <Compile Include="Models\Category_Product.cs" />
@@ -361,6 +459,7 @@
     <Compile Include="Models\Courier.cs" />
     <Compile Include="Models\CreditCard.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\CustomerUpdate.cs" />
     <Compile Include="Models\GenericResponse.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Index.cs" />
@@ -369,10 +468,9 @@
     <Compile Include="Models\ModDate.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetail.cs" />
-    <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\OrderStatusHistory.cs" />
     <Compile Include="Models\Payment.cs" />
-    <Compile Include="Models\PersonalInfo.cs" />
+    <Compile Include="Models\PersonalInformation.cs" />
     <Compile Include="Models\PhoneNumber.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductDetail.cs" />
@@ -520,6 +618,72 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902051103009_AddBrandUpdatesToDb.resx">
       <DependentUpon>201902051103009_AddBrandUpdatesToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902051512085_AddPersonalInfoToDb.resx">
+      <DependentUpon>201902051512085_AddPersonalInfoToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902060613364_AddCreditCardsToDb.resx">
+      <DependentUpon>201902060613364_AddCreditCardsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902060614535_AddBillingInfosToDb.resx">
+      <DependentUpon>201902060614535_AddBillingInfosToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902060619005_RefactorBillingInfosAndCreditCardsInDb.resx">
+      <DependentUpon>201902060619005_RefactorBillingInfosAndCreditCardsInDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902060622027_AddCustomersAndUpdatesToDb.resx">
+      <DependentUpon>201902060622027_AddCustomersAndUpdatesToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902060706123_AddSuppliersToDb.resx">
+      <DependentUpon>201902060706123_AddSuppliersToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902060708484_AddUserProfilesToDb.resx">
+      <DependentUpon>201902060708484_AddUserProfilesToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902060807144_RefactorCustomersInDb.resx">
+      <DependentUpon>201902060807144_RefactorCustomersInDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902061920597_EmptyMigration.resx">
+      <DependentUpon>201902061920597_EmptyMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902061921446_RenameBillingInfoInDb.resx">
+      <DependentUpon>201902061921446_RenameBillingInfoInDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902061934090_RenameTables.resx">
+      <DependentUpon>201902061934090_RenameTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902062048570_RenameTables2.resx">
+      <DependentUpon>201902062048570_RenameTables2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902070649397_RenamePhoneNumberProperties.resx">
+      <DependentUpon>201902070649397_RenamePhoneNumberProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902070653420_RefactorPhoneNumberPropertyType.resx">
+      <DependentUpon>201902070653420_RefactorPhoneNumberPropertyType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902070834269_AddCartToDb.resx">
+      <DependentUpon>201902070834269_AddCartToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902070842015_AddCartItemsToDb.resx">
+      <DependentUpon>201902070842015_AddCartItemsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902071549305_AddCartUpdateToDb.resx">
+      <DependentUpon>201902071549305_AddCartUpdateToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081046149_AddCourierToDb.resx">
+      <DependentUpon>201902081046149_AddCourierToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081047169_AddOrderToDb.resx">
+      <DependentUpon>201902081047169_AddOrderToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081048291_AddOrderDetailsToDb.resx">
+      <DependentUpon>201902081048291_AddOrderDetailsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081051067_AddOrderStatusHistoryToDb.resx">
+      <DependentUpon>201902081051067_AddOrderStatusHistoryToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081155071_AddPaymentToDb.resx">
+      <DependentUpon>201902081155071_AddPaymentToDb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

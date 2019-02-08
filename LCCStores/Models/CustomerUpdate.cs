@@ -6,9 +6,9 @@ using System.Web;
 
 namespace LCCStores.Models
 {
-    public class OrderStatus : IOrderStatus
+    public class CustomerUpdate : IUpdates
     {
-        public int Id {get; set; }
-        public string Name {get; set; }
+        public int Id { get; set; }
+        public DateTime LastUpdateTime { get; set; }
     }
 }
