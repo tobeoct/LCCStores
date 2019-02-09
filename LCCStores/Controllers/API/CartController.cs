@@ -53,7 +53,7 @@ namespace LCCStores.Controllers
         public HttpResponseMessage GetCart(int customerId)
         {
             var genericResponse = new GenericResponse();
-            var cartsKey = $"TotalCarts";
+            var cartsKey = $"TotalCarts{customerId}";
             var cartItems = new List<CartItem>();
             var fullCart = new Carts();
             try
@@ -97,6 +97,8 @@ namespace LCCStores.Controllers
                 }
 
                 Trace.TraceInformation($"Gotten Cart with CustomerID :{JsonConvert.SerializeObject(fullCart)}");
+
+                new Cacher().InsertIntoCache(cartsKey, fullCart);
 
                 genericResponse = new Response().GenerateResponse(true, $"Successfully got Cart for :{cart.Customer.FirstName.ToUpper()}", fullCart);
 
@@ -310,7 +312,7 @@ namespace LCCStores.Controllers
         }
 
 
-        // PUT api/Customer/EditCustomer
+        // PUT api/Cart/EditCart
         [AcceptVerbs("PUT")]
         [HttpPut]
         [Route("api/Cart/EditCart")]
@@ -323,7 +325,7 @@ namespace LCCStores.Controllers
 
                 Trace.TraceInformation("UPDATING Cart");
 
-                //VALIDATING PRODUCT DETAILS                
+                //VALIDATING CART DETAILS                
                 ValidateCartItem(fullCart.CartItem, Actions.Edit);
                 var cart = _entityLogic.GetSingle(c => c.Id == fullCart.Cart.Id);
                 var cartItem = _entityLogicItem.GetSingle(c => c.Id == fullCart.CartItem.Id,c=>c.Product,c=>c.Product.ProductDetail);
@@ -380,7 +382,7 @@ namespace LCCStores.Controllers
         public HttpResponseMessage RemoveFromCart(Index indexes)
         {
             var genericResponse = new GenericResponse();
-            var cartItems = "";
+            
             try
             {
                
@@ -403,9 +405,6 @@ namespace LCCStores.Controllers
                     else
                     {
                         genericResponse = new Response().GenerateResponse(false, $"Cart Item with Id: {id.Id} doesnt exist in the db ", null);
-
-                        //  Trace.TraceInformation($"Customers:{customers.ToUpper()} deleted");
-
                         return Request.CreateErrorResponse(HttpStatusCode.BadRequest, JsonConvert.SerializeObject(genericResponse));
                     }
                 }
@@ -518,6 +517,7 @@ namespace LCCStores.Controllers
                         Quantity = item.Quantity,
                         OrderNumber = order.OrderNumber,
                         Discount = 0,
+                        Date=DateTime.Now
                     };
                     var orderDetailsToDb = new EntityLogic<OrderDetail>();
                     orderDetailsToDb.Insert(orderDetails);
@@ -539,6 +539,8 @@ namespace LCCStores.Controllers
                 orderStatusHistoryToDb.Insert(orderStatusHistory);
                 orderStatusHistoryToDb.Save();
 
+                new Updates().OrdersUpdate();
+
                 totalOrder.Order = order;
                 totalOrder.OrderStatusHistory = orderStatusHistory;
 
@@ -556,9 +558,6 @@ namespace LCCStores.Controllers
         public bool PlaceOrder(TotalOrder totalOrder)
         {
             string url = "http://localhost:58426/api/Order/PlaceOrder/";
-
-
-
             var result = new ApiPostAndGet().UrlPost(url, totalOrder, null);
             var response = JsonConvert.DeserializeObject<GenericResponse>(result);
 

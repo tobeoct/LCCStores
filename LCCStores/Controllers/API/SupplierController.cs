@@ -1,28 +1,18 @@
-﻿using LCCStores.Helper;
-using LCCStores.Models;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using static LCCStores.Controllers.CartController;
 
 namespace LCCStores.Controllers
 {
-    public class OrderController : ApiController
+    public class SupplierController : ApiController
     {
-        
-
-        // POST api/Order/CreateOrder
-        [HttpPost]
-        [Route("api/Order/PlaceOrder")]
-        public IHttpActionResult PlaceOrder(TotalOrder totalOrder)
+        // GET api/<controller>
+        public IEnumerable<string> Get()
         {
-            var genericResponse = new GenericResponse();
-            genericResponse = new Response().GenerateResponse(true, $"Successfully Placed Order", totalOrder);
-            return Json(genericResponse);
+            return new string[] { "value1", "value2" };
         }
 
         // GET api/<controller>/5

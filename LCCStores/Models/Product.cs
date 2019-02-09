@@ -19,5 +19,7 @@ namespace LCCStores.Models
         public Admin AddedBy {get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateUpdated { get; set; }
+        //public int? ReviewId { get; set; }
+        //public Review Review { get; set; }
     }
 }

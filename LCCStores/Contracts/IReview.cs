@@ -15,8 +15,7 @@ namespace LCCStores.Contracts
         int UserProfileId { get; set; }
         UserProfile UserProfile { get; set; }
         DateTime Date { get; set; }
-        int ReviewDetailId { get; set; }
-        ReviewDetail ReviewDetail { get; set; }
+       
 
     }
 }

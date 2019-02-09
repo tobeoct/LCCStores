@@ -18,5 +18,7 @@ namespace LCCStores.Contracts
         Tax Tax { get; set; }
         int AddedById { get; set; }
         Admin AddedBy { get; set; }
+        //int? ReviewId { get;set }
+        //Review Review { get; set }
     }
 }

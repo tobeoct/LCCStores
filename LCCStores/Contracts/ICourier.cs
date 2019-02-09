@@ -12,6 +12,7 @@ namespace LCCStores.Contracts
         int Id { get; set; }
         int PhoneNumber { get; set; }
         string CompanyName { get; set; }
+        string PlateNumber { get; set; }
         int AddedById { get; set; }
         Admin AddedBy { get; set; }
     }

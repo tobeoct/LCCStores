@@ -18,5 +18,6 @@ namespace LCCStores.Contracts
         int Quantity { get; set; }
         Guid OrderNumber { get; set; }
         decimal Discount { get; set; }
+        DateTime Date { get; set; }
     }
 }

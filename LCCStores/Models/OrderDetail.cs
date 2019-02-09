@@ -18,5 +18,6 @@ namespace LCCStores.Models
         public decimal Discount {get; set; }
         public Order Order {get; set; }
         public Product Product {get; set; }
+        public DateTime Date { get; set; }
     }
 }

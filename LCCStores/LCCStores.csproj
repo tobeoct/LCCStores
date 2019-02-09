@@ -248,16 +248,19 @@
     <Compile Include="Contracts\ITax.cs" />
     <Compile Include="Contracts\IUserProfile.cs" />
     <Compile Include="Contracts\IWishList.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\BillingController.cs" />
-    <Compile Include="Controllers\BrandController.cs" />
-    <Compile Include="Controllers\CartController.cs" />
-    <Compile Include="Controllers\CouriersController.cs" />
-    <Compile Include="Controllers\CustomerController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\OrderController.cs" />
-    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\BillingController.cs" />
+    <Compile Include="Controllers\API\BrandController.cs" />
+    <Compile Include="Controllers\API\CartController.cs" />
+    <Compile Include="Controllers\API\CouriersController.cs" />
+    <Compile Include="Controllers\API\CustomerController.cs" />
+    <Compile Include="Controllers\API\HomeController.cs" />
+    <Compile Include="Controllers\API\ManageController.cs" />
+    <Compile Include="Controllers\API\MiscellaneousController.cs" />
+    <Compile Include="Controllers\API\OrderController.cs" />
+    <Compile Include="Controllers\API\ProductController.cs" />
+    <Compile Include="Controllers\API\ReviewController.cs" />
+    <Compile Include="Controllers\API\SupplierController.cs" />
     <Compile Include="DTO\CustomerDto.cs" />
     <Compile Include="DTO\ProductDto.cs" />
     <Compile Include="DTO\ProductImageDto.cs" />
@@ -440,6 +443,38 @@
     <Compile Include="Migrations\201902081155071_AddPaymentToDb.Designer.cs">
       <DependentUpon>201902081155071_AddPaymentToDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902081557392_AddReviewsToDb.cs" />
+    <Compile Include="Migrations\201902081557392_AddReviewsToDb.Designer.cs">
+      <DependentUpon>201902081557392_AddReviewsToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902081558436_AddReviewsDetToDb.cs" />
+    <Compile Include="Migrations\201902081558436_AddReviewsDetToDb.Designer.cs">
+      <DependentUpon>201902081558436_AddReviewsDetToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902081559110_AddReviewsDetToDb2.cs" />
+    <Compile Include="Migrations\201902081559110_AddReviewsDetToDb2.Designer.cs">
+      <DependentUpon>201902081559110_AddReviewsDetToDb2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902081559544_AddReviewsDetToDb3.cs" />
+    <Compile Include="Migrations\201902081559544_AddReviewsDetToDb3.Designer.cs">
+      <DependentUpon>201902081559544_AddReviewsDetToDb3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902081600336_AddReviewToDb3.cs" />
+    <Compile Include="Migrations\201902081600336_AddReviewToDb3.Designer.cs">
+      <DependentUpon>201902081600336_AddReviewToDb3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902081600561_AddReviewToDb4.cs" />
+    <Compile Include="Migrations\201902081600561_AddReviewToDb4.Designer.cs">
+      <DependentUpon>201902081600561_AddReviewToDb4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902091054252_AddDateToReviewDetails.cs" />
+    <Compile Include="Migrations\201902091054252_AddDateToReviewDetails.Designer.cs">
+      <DependentUpon>201902091054252_AddDateToReviewDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902091115478_Refresh.cs" />
+    <Compile Include="Migrations\201902091115478_Refresh.Designer.cs">
+      <DependentUpon>201902091115478_Refresh.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -460,6 +495,7 @@
     <Compile Include="Models\CreditCard.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\CustomerUpdate.cs" />
+    <Compile Include="Models\FAQ.cs" />
     <Compile Include="Models\GenericResponse.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Index.cs" />
@@ -469,6 +505,7 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\OrderStatusHistory.cs" />
+    <Compile Include="Models\OrdersUpdate.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\PersonalInformation.cs" />
     <Compile Include="Models\PhoneNumber.cs" />
@@ -478,6 +515,7 @@
     <Compile Include="Models\ProductUpdate.cs" />
     <Compile Include="Models\Review.cs" />
     <Compile Include="Models\ReviewDetail.cs" />
+    <Compile Include="Models\ReviewUpdate.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\Tax.cs" />
     <Compile Include="Models\UserProfile.cs" />
@@ -684,6 +722,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902081155071_AddPaymentToDb.resx">
       <DependentUpon>201902081155071_AddPaymentToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081557392_AddReviewsToDb.resx">
+      <DependentUpon>201902081557392_AddReviewsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081558436_AddReviewsDetToDb.resx">
+      <DependentUpon>201902081558436_AddReviewsDetToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081559110_AddReviewsDetToDb2.resx">
+      <DependentUpon>201902081559110_AddReviewsDetToDb2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081559544_AddReviewsDetToDb3.resx">
+      <DependentUpon>201902081559544_AddReviewsDetToDb3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081600336_AddReviewToDb3.resx">
+      <DependentUpon>201902081600336_AddReviewToDb3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902081600561_AddReviewToDb4.resx">
+      <DependentUpon>201902081600561_AddReviewToDb4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902091054252_AddDateToReviewDetails.resx">
+      <DependentUpon>201902091054252_AddDateToReviewDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902091115478_Refresh.resx">
+      <DependentUpon>201902091115478_Refresh.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

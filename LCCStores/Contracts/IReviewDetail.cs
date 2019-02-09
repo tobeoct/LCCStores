@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LCCStores.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,8 @@ namespace LCCStores.Contracts
     public interface IReviewDetail
     {
         int Id { get; set; }
+        int ReviewId { get; set; }
+        Review Review { get; set; }
         string Comment { get; set; }
     }
 }

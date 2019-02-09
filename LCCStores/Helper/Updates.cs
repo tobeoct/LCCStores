@@ -112,5 +112,58 @@ namespace LCCStores.Helper
             }
 
         }
+        public bool ReviewsUpdate()
+        {
+            try
+            {
+                var _logic = new EntityLogic<ReviewUpdate>();
+                var updateTime = _logic.GetSingle(c => c.Id == 1);
+                if (updateTime != null)
+                {
+                    updateTime.LastUpdateTime = DateTime.Now;
+                    _logic.Update(updateTime);
+                    return true;
+                }
+                var upTime = new ReviewUpdate()
+                {
+                    LastUpdateTime = DateTime.Now
+                };
+                _logic.Insert(upTime);
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+        public bool OrdersUpdate()
+        {
+            try
+            {
+                var _logic = new EntityLogic<OrdersUpdate>();
+                var updateTime = _logic.GetSingle(c => c.Id == 1);
+                if (updateTime != null)
+                {
+                    updateTime.LastUpdateTime = DateTime.Now;
+                    _logic.Update(updateTime);
+                    return true;
+                }
+                var upTime = new OrdersUpdate()
+                {
+                    LastUpdateTime = DateTime.Now
+                };
+                _logic.Insert(upTime);
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+
     }
 }
