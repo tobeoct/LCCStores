@@ -14,7 +14,7 @@ namespace LCCStores.Controllers
 {
     public class CartController : ApiController
     {
-      
+
         EntityLogic<Cart> _entityLogic;
         EntityLogic<CartItem> _entityLogicItem;
 
@@ -180,7 +180,7 @@ namespace LCCStores.Controllers
             }
         }
 
-        // POST api/Cart/CreateCart
+        // POST api/Cart/AddToCart
         [AcceptVerbs("POST")]
         [HttpPost]
         [Route("api/Cart/AddToCart")]
@@ -253,11 +253,11 @@ namespace LCCStores.Controllers
             }
         }
 
-        // POST api/Cart/CreateCart
+        // POST api/Cart/AddToCart
         [AcceptVerbs("POST")]
         [HttpPost]
         [Route("api/Cart/CheckOutCart")]
-        public HttpResponseMessage CheckOutCart(Carts fullCart)
+        public async System.Threading.Tasks.Task<HttpResponseMessage> CheckOutCart(Carts fullCart)
         {
             //Get Cart Details
             //Generate Order and Order Details
@@ -268,37 +268,45 @@ namespace LCCStores.Controllers
             Trace.TraceInformation($"Checking Out Cart :{JsonConvert.SerializeObject(fullCart)}");
             try
             {
-                var customer = new EntityLogic<Customer>().GetSingle(c => c.Id == fullCart.Cart.CustomerId, c => c.BillingInfo);
+                var customer = new EntityLogic<Customer>().GetSingle(c => c.Id == fullCart.Cart.CustomerId, c => c.BillingInfo,c=>c.PersonalInfo);
                 if (customer != null)
                 {
+                   //HANDLE UNREGISTERED USERS !!!!!!!!
                     if (customer.BillingInfo != null)
                     {
                         var order = GenerateOrderDetails(fullCart, customer.BillingInfoId);
-                        var isSuccessful = PlaceOrder(order);
-                        if (isSuccessful)
+                        order.Order.Customer = customer;
+
+                        var reference = "";
+                        var authorization_url = "";
+                        var result = await PlaceOrderAsync(order);
+                        if (result.status)
                         {
-                            var paymentInfo = GeneratePaymentInfo(order.Order, customer);
+                            reference = result.data.reference;
+                            authorization_url = result.data.authorization_url;
+                            var paymentInfo = GeneratePaymentInfo(order.Order, customer, reference);
+
                             var savePaymentInfo = new EntityLogic<Payment>();
                             savePaymentInfo.Insert(paymentInfo);
                             savePaymentInfo.Save();
-                            var invoice = GenerateInvoice();
-                            if (invoice != null)
-                            {
-                                SendMail(customer.PersonalInfo.Email, invoice);
-                            }
+
+
+                            Trace.TraceInformation($"Heading to Payment Gateway");
+                            genericResponse = new Response().GenerateResponse(true, $"Successfully checked out Cart for :{fullCart.Cart.Customer.FirstName.ToUpper()} to PayStack", authorization_url);
+                            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(genericResponse));
+                            //var invoice = GenerateInvoice();
+                            //if (invoice != null)
+                            //{
+                            //    SendMail(customer.PersonalInfo.Email, invoice);
+                            //}
                         }
 
-
                     }
+                 
                 }
 
-
-
-                genericResponse = new Response().GenerateResponse(true, $"Successfully checked out Cart for :{fullCart.Cart.Customer.FirstName.ToUpper()}", fullCart);
-
-
-
-                return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(genericResponse));
+                genericResponse = new Response().GenerateResponse(false, $"No such Customer Exists", null);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, JsonConvert.SerializeObject(genericResponse));
             }
             catch (Exception e)
             {
@@ -328,8 +336,8 @@ namespace LCCStores.Controllers
                 //VALIDATING CART DETAILS                
                 ValidateCartItem(fullCart.CartItem, Actions.Edit);
                 var cart = _entityLogic.GetSingle(c => c.Id == fullCart.Cart.Id);
-                var cartItem = _entityLogicItem.GetSingle(c => c.Id == fullCart.CartItem.Id,c=>c.Product,c=>c.Product.ProductDetail);
-                if(cartItem!=null)
+                var cartItem = _entityLogicItem.GetSingle(c => c.Id == fullCart.CartItem.Id, c => c.Product, c => c.Product.ProductDetail);
+                if (cartItem != null)
                 {
                     var cartQuantity = cartItem.Quantity;
                     cartItem.Quantity = fullCart.CartItem.Quantity;
@@ -382,14 +390,14 @@ namespace LCCStores.Controllers
         public HttpResponseMessage RemoveFromCart(Index indexes)
         {
             var genericResponse = new GenericResponse();
-            
+
             try
             {
-               
+
                 foreach (var id in indexes.Ids)
                 {
-                    var cartItem = _entityLogicItem.GetSingle(c => c.Id == id.Id,c=>c.Product,c=>c.Product.ProductDetail);
-                   
+                    var cartItem = _entityLogicItem.GetSingle(c => c.Id == id.Id, c => c.Product, c => c.Product.ProductDetail);
+
                     if (cartItem != null)
                     {
                         var quantity = cartItem.Quantity;
@@ -398,7 +406,7 @@ namespace LCCStores.Controllers
                         _entityLogicItem.Delete(cartItem);
                         _entityLogicItem.Save();
                         cart.NumberOfProducts = cart.NumberOfProducts - quantity;
-                        cart.TotalPrice = cart.TotalPrice - (quantity*price);
+                        cart.TotalPrice = cart.TotalPrice - (quantity * price);
                         _entityLogic.Update(cart);
                         _entityLogic.Save();
                     }
@@ -498,7 +506,8 @@ namespace LCCStores.Controllers
                     CourierId = null,
                     Freight = fullCart.Cart.NumberOfProducts,
                     BillingInfoId = (int)billingInfoId,
-                    OrderStatus = Helper.OrderStatus.Placed
+                    OrderStatus = OrderStatus.YetToConfirm,
+                    TotalPrice=fullCart.Cart.TotalPrice
 
                 };
                 //SAVE TO DB
@@ -517,7 +526,7 @@ namespace LCCStores.Controllers
                         Quantity = item.Quantity,
                         OrderNumber = order.OrderNumber,
                         Discount = 0,
-                        Date=DateTime.Now
+                        Date = DateTime.Now
                     };
                     var orderDetailsToDb = new EntityLogic<OrderDetail>();
                     orderDetailsToDb.Insert(orderDetails);
@@ -530,7 +539,7 @@ namespace LCCStores.Controllers
                 var orderStatusHistory = new OrderStatusHistory()
                 {
                     OrderId = order.Id,
-                    OrderStatus = OrderStatus.Placed,
+                    OrderStatus = OrderStatus.YetToConfirm,
                     UserId = 3,
                     Date = DateTime.Now
                 };
@@ -555,28 +564,31 @@ namespace LCCStores.Controllers
             return totalOrder;
         }
 
-        public bool PlaceOrder(TotalOrder totalOrder)
+        public async System.Threading.Tasks.Task<TransactionResult> PlaceOrderAsync(TotalOrder totalOrder)
         {
-            string url = "http://localhost:58426/api/Order/PlaceOrder/";
-            var result = new ApiPostAndGet().UrlPost(url, totalOrder, null);
-            var response = JsonConvert.DeserializeObject<GenericResponse>(result);
 
-            return response.IsSuccessful;
+            //string url = "http://localhost:58426/api/Order/PlaceOrder/";
+            //var result = new ApiPostAndGet().UrlPost(url, totalOrder, null);
+            var result = await new OrderController().PlaceOrder(totalOrder);
+            
+
+            return (TransactionResult)result?.Data;
         }
 
-        public Payment GeneratePaymentInfo(Order order, Customer customer)
+        public Payment GeneratePaymentInfo(Order order, Customer customer, string reference)
         {
             var paymentInfo = new Payment();
             if (order != null && customer != null)
             {
                 paymentInfo = new Payment()
                 {
-                    Type = PaymentType.MasterCard,
+                    Type = "",
                     OrderId = order.Id,
                     CustomerId = customer.Id,
                     BillingInfoId = (int)customer.BillingInfoId,
                     Date = DateTime.Now,
-                    PaymentReference = Guid.NewGuid()
+                    PaymentReference = reference,
+                    Status = PaymentStatus.Placed
                 };
             }
 

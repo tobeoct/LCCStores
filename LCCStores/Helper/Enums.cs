@@ -28,7 +28,8 @@ namespace LCCStores.Helper
         Placed=0,
        InDelivery=1,
        Delivered=2,
-       Cancelled=3
+       Cancelled=3,
+        YetToConfirm = 4
 
     }
     public enum ShipVia
@@ -43,6 +44,13 @@ namespace LCCStores.Helper
         MasterCard = 0,
         Visa = 1,
         Verve = 2
+
+    }
+    public enum PaymentStatus
+    {
+        Placed = 0,
+        Verified = 1,
+        UnVerififed = 2
 
     }
 }

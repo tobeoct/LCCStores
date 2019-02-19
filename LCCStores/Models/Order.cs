@@ -23,5 +23,6 @@ namespace LCCStores.Models
         public Courier Courier { get; set; }
         public BillingInformation BillingInfo { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

@@ -39,10 +39,12 @@ namespace LCCStores.Models
         public DbSet<BillingInformation> BillingInformation { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<SuppliersUpdate> SuppliersUpdates { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<CartUpdate> CartUpdates { get; set; }
         public DbSet<Courier> Couriers { get; set; }
+        public DbSet<CouriersUpdate> CouriersUpdates { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderStatusHistory> OrderStatusHistorys { get; set; }
@@ -51,7 +53,7 @@ namespace LCCStores.Models
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ReviewDetail> ReviewDetails { get; set; }
         public DbSet<ReviewUpdate> ReviewUpdates { get; set; }
-
+       
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

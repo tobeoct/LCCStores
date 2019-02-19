@@ -24,5 +24,6 @@ namespace LCCStores.Contracts
         int BillingInfoId { get; set; }
         BillingInformation BillingInfo { get; set; }
         OrderStatus OrderStatus { get; set; }
+        decimal TotalPrice { get; set; }
     }
 }

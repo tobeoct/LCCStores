@@ -15,8 +15,10 @@ namespace LCCStores.Contracts
         string CompanyName { get; set; }
         string FirstName { get; set; }
         string LastName { get; set; }
-       // string Title { get; set; }
-       int AddedById { get; set; }
+        int ProductId { get; set; }
+        Product Product { get; set; }
+        // string Title { get; set; }
+        int AddedById { get; set; }
         Admin AddedBy { get; set; }
     }
 }

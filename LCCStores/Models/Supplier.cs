@@ -13,7 +13,8 @@ namespace LCCStores.Models
         public string CompanyName { get; set;}
         public string FirstName { get; set;}
         public string LastName { get; set;}
-     
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
         public PersonalInformation PersonalInfo { get; set;}
         public int AddedById { get; set;}
         public Admin AddedBy { get; set;}

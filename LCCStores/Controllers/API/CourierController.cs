@@ -10,54 +10,55 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-
 namespace LCCStores.Controllers
 {
-    public class SupplierController : ApiController
+    public class CourierController : ApiController
     {
-        EntityLogic<Supplier> _entityLogic;
+
+        EntityLogic<Courier> _entityLogic;
 
         string _errorMessage = "";
 
-        public SupplierController()
+        public CourierController()
         {
-            _entityLogic = new EntityLogic<Supplier>();
+            _entityLogic = new EntityLogic<Courier>();
 
 
         }
-        // GET api/Supplier/GetSuppliers
+
+        // GET api/Courier/GetCouriers
         [HttpGet]
-        [Route("api/Supplier/GetSuppliers")]
-        public HttpResponseMessage GetSuppliers()
+        [Route("api/Courier/GetCouriers")]
+        public HttpResponseMessage GetCouriers()
         {
             var genericResponse = new GenericResponse();
             try
             {
-                var Suppliers = new List<Supplier>();
-                var SuppliersKey = $"TotalSuppliers";
-                var updateTime = new EntityLogic<SuppliersUpdate>().GetSingle(c => c.Id == 1)?.LastUpdateTime;
+                var couriers = new List<Courier>();
+                var couriersKey = $"TotalCouriers";
+                var updateTime = new EntityLogic<CouriersUpdate>().GetSingle(c => c.Id == 1)?.LastUpdateTime;
                 if (updateTime != null)
                 {
                     if (updateTime < DateTime.Now)
                     {
-                        Suppliers = (List<Supplier>)new Cacher().GetCache(SuppliersKey);
-                        if (Suppliers != null)
+                        couriers = (List<Courier>)new Cacher().GetCache(couriersKey);
+                        if (couriers != null)
                         {
-                            genericResponse = new Response().GenerateResponse(true, $"Successfully gotten Suppliers", Suppliers);
+                            genericResponse = new Response().GenerateResponse(true, $"Successfully gotten couriers", couriers);
 
-                            Trace.TraceInformation("Sending Suppliers");
+                            Trace.TraceInformation("Sending couriers");
 
                             return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(genericResponse));
                         }
                     }
 
                 }
-                Suppliers = new List<Supplier>();
-                Suppliers = _entityLogic.GetAll();
+                couriers = new List<Courier>();
+                couriers = _entityLogic.GetAll();
 
 
-                new Cacher().InsertIntoCache(SuppliersKey, Suppliers);
-                genericResponse = new Response().GenerateResponse(true, $"Successfully gotten all Suppliers", Suppliers);
+                new Cacher().InsertIntoCache(couriersKey, couriers);
+                genericResponse = new Response().GenerateResponse(true, $"Successfully gotten all couriers", couriers);
                 return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(genericResponse));
             }
             catch (Exception e)
@@ -66,48 +67,48 @@ namespace LCCStores.Controllers
                 Trace.TraceInformation("AN ERROR WAS CAUGHT");
                 Trace.TraceInformation($"STACK TRACE:{e.StackTrace.ToString()}, INNER EXCEPTION:{e.InnerException?.Message}, MESSAGE:{e.Message.ToString()}");
 
-                genericResponse = new Response().GenerateResponse(false, "An error occured while getting Suppliers", null);
+                genericResponse = new Response().GenerateResponse(false, "An error occured while getting couriers", null);
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, JsonConvert.SerializeObject(genericResponse));
             }
         }
 
-        // POST api/Supplier/CreateSupplier
+        // POST api/Courier/CreateCourier
         [AcceptVerbs("POST")]
         [HttpPost]
-        [Route("api/Supplier/CreateSupplier")]
-        public HttpResponseMessage CreateSupplier(Supplier Supplier)
+        [Route("api/Courier/CreateCourier")]
+        public HttpResponseMessage CreateCourier(Courier courier)
         {
 
             var genericResponse = new GenericResponse();
             try
             {
 
-                Trace.TraceInformation("Saving Supplier");
+                Trace.TraceInformation("Saving Courier");
 
-                //VALIDATING Supplier
-                ValidateSupplier(Supplier, Actions.Create);
+                //VALIDATING COURIER
+                ValidateCourier(courier, Actions.Create);
 
                 if (!String.IsNullOrEmpty(_errorMessage))
                 {
 
-                    genericResponse = new Response().GenerateResponse(false, $"An error occured while creating Supplier {Supplier.CompanyName} - {_errorMessage}", null);
+                    genericResponse = new Response().GenerateResponse(false, $"An error occured while creating Courier {courier.CompanyName} - {_errorMessage}", null);
 
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, JsonConvert.SerializeObject(genericResponse));
                 };
 
-                //SAVE Supplier TO DB
+                //SAVE COURIER TO DB
 
                 Trace.TraceInformation("Saving Cart to DB");
 
-                Supplier.AddedBy = null;
-                _entityLogic.Insert(Supplier);
+                courier.AddedBy = null;
+                _entityLogic.Insert(courier);
                 _entityLogic.Save();
 
-                new Updates().SuppliersUpdate();
+                new Updates().CouriersUpdate();
 
 
-                Trace.TraceInformation($"Supplier :{JsonConvert.SerializeObject(Supplier)} Created Successfully");
-                genericResponse = new Response().GenerateResponse(true, $" Supplier created successfully", null);
+                Trace.TraceInformation($"Courier :{JsonConvert.SerializeObject(courier)} Created Successfully");
+                genericResponse = new Response().GenerateResponse(true, $" Courier created successfully", null);
 
                 return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(genericResponse));
 
@@ -119,15 +120,15 @@ namespace LCCStores.Controllers
                 Trace.TraceInformation("AN ERROR WAS CAUGHT");
                 Trace.TraceInformation($"STACK TRACE:{e.StackTrace.ToString()}, INNER EXCEPTION:{e.InnerException?.Message}, MESSAGE:{e.Message.ToString()}");
 
-                genericResponse = new Response().GenerateResponse(false, $"An error occured while creating Supplier", null);
+                genericResponse = new Response().GenerateResponse(false, $"An error occured while creating Courier", null);
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, JsonConvert.SerializeObject(genericResponse));
             }
         }
 
         [AcceptVerbs("PUT")]
         [HttpPut]
-        [Route("api/Supplier/EditSupplier")]
-        public HttpResponseMessage EditSupplier(Supplier Supplier)
+        [Route("api/Courier/EditCourier")]
+        public HttpResponseMessage EditCourier(Courier courier)
         {
 
             var genericResponse = new GenericResponse();
@@ -136,32 +137,30 @@ namespace LCCStores.Controllers
 
                 Trace.TraceInformation("UPDATING Order Status");
 
-                //VALIDATING Supplier               
-                ValidateSupplier(Supplier, Actions.Edit);
-                var supplierInDB = _entityLogic.GetSingle(c => c.Id == Supplier.Id);
-                if (supplierInDB != null)
+                //VALIDATING COURIER               
+                ValidateCourier(courier, Actions.Edit);
+                var courierInDb = _entityLogic.GetSingle(c => c.Id == courier.Id);
+                if (courierInDb != null)
 
                 {
-
-                    supplierInDB.LastName = Supplier.LastName;
-                    supplierInDB.CompanyName = Supplier.CompanyName;
-                    supplierInDB.FirstName = Supplier.FirstName;
-                    supplierInDB.ProductId = Supplier.ProductId;
-                    _entityLogic.Update(supplierInDB);
+                    courierInDb.PlateNumber = courier.PlateNumber;
+                    courierInDb.PhoneNumber = courier.PhoneNumber;
+                    courierInDb.CompanyName = courier.CompanyName;
+                    _entityLogic.Update(courierInDb);
                     _entityLogic.Save();
 
                     new Updates().OrdersUpdate();
 
-                    Trace.TraceInformation($"Supplier:{JsonConvert.SerializeObject(supplierInDB)}");
+                    Trace.TraceInformation($"Courier:{JsonConvert.SerializeObject(courierInDb)}");
 
-                    genericResponse = new Response().GenerateResponse(true, $"Successfully updated Supplier", null);
+                    genericResponse = new Response().GenerateResponse(true, $"Successfully updated Courier", null);
 
-                    Trace.TraceInformation($"Supplier Updated");
+                    Trace.TraceInformation($"Courier Updated");
 
                     return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(genericResponse));
                 }
 
-                genericResponse = new Response().GenerateResponse(false, $"An error occured while updating Supplier - No such Supplier exist", null);
+                genericResponse = new Response().GenerateResponse(false, $"An error occured while updating Courier - No such Courier exist", null);
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, JsonConvert.SerializeObject(genericResponse));
 
 
@@ -172,17 +171,17 @@ namespace LCCStores.Controllers
                 Trace.TraceInformation("AN ERROR WAS CAUGHT");
                 Trace.TraceInformation($"STACK TRACE:{e.StackTrace.ToString()}, INNER EXCEPTION:{e.InnerException?.Message}, MESSAGE:{e.Message.ToString()}");
 
-                genericResponse = new Response().GenerateResponse(false, $"An error occured while updating Supplier", null);
+                genericResponse = new Response().GenerateResponse(false, $"An error occured while updating Courier", null);
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, JsonConvert.SerializeObject(genericResponse));
             }
         }
 
 
-        // DELETE api/Supplier/DeleteSupplier
+        // DELETE api/Courier/DeleteCourier
         [AcceptVerbs("DELETE")]
         [HttpDelete]
-        [Route("api/Supplier/DeleteSupplier")]
-        public HttpResponseMessage DeleteSupplier(Index indexes)
+        [Route("api/Courier/DeleteCourier")]
+        public HttpResponseMessage DeleteCourier(Index indexes)
         {
             var genericResponse = new GenericResponse();
 
@@ -190,28 +189,28 @@ namespace LCCStores.Controllers
             {
                 foreach (var id in indexes.Ids)
                 {
-                    var Supplier = _entityLogic.GetSingle(c => c.Id == id.Id);
+                    var courier = _entityLogic.GetSingle(c => c.Id == id.Id);
 
-                    if (Supplier != null)
+                    if (courier != null)
                     {
-                        _entityLogic.Delete(Supplier);
+                        _entityLogic.Delete(courier);
                         _entityLogic.Save();
-
+                        
                     }
                     else
                     {
-                        genericResponse = new Response().GenerateResponse(false, $"No Supplier exists with id {id} ", null);
+                        genericResponse = new Response().GenerateResponse(false, $"No courier exists with id {id} ", null);
                         return Request.CreateErrorResponse(HttpStatusCode.BadRequest, JsonConvert.SerializeObject(genericResponse));
                     }
 
                 }
-                new Updates().SuppliersUpdate();
-                genericResponse = new Response().GenerateResponse(true, $"Successfully deleted Suppliers ", null);
+                new Updates().CouriersUpdate();
+                genericResponse = new Response().GenerateResponse(true, $"Successfully deleted couriers ", null);
 
-                Trace.TraceInformation($"Suppliers deleted");
+                Trace.TraceInformation($"Couriers deleted");
 
                 return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(genericResponse));
-
+               
 
             }
             catch (Exception e)
@@ -220,24 +219,25 @@ namespace LCCStores.Controllers
                 Trace.TraceInformation("AN ERROR WAS CAUGHT");
                 Trace.TraceInformation($"STACK TRACE:{e.StackTrace.ToString()}, INNER EXCEPTION:{e.InnerException?.Message}, MESSAGE:{e.Message.ToString()}");
 
-                genericResponse = new Response().GenerateResponse(false, $"An error occured while deleting Suppliers", null);
+                genericResponse = new Response().GenerateResponse(false, $"An error occured while deleting couriers", null);
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, JsonConvert.SerializeObject(genericResponse));
             }
         }
 
-        public bool ValidateSupplier(Supplier Supplier, Actions action)
+
+        public bool ValidateCourier(Courier courier, Actions action)
         {
             var error = "";
-            //VALIDATE Supplier
+            //VALIDATE COURIER
             if (action == Actions.Create)
             {
-                var isSupplier = _entityLogic.GetSingle(c => c.CompanyName == Supplier.CompanyName && c.ProductId == Supplier.ProductId);
-                if (isSupplier != null)
+                var isCourier = _entityLogic.GetSingle(c => c.CompanyName == courier.CompanyName);
+                if (isCourier != null)
                 {
-                    _errorMessage = _errorMessage + "Supplier already exists with that name";
+                    _errorMessage = _errorMessage + "Courier already exists with that name";
                 }
             }
-            error = error + new Validations<Supplier>().ValidateData(Supplier);
+            error = error + new Validations<Courier>().ValidateData(courier);
 
             if (!String.IsNullOrEmpty(error))
             {

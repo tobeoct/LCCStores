@@ -100,7 +100,7 @@ namespace LCCStores.Logic
         public virtual List<T> GetN(int pageNumber, Func<T, bool> where, params Expression<Func<T, object>>[] navigationProperties)
         {
             List<T> list;
-            pageNumber = 20+(pageNumber * 10);
+            pageNumber = 20 + (pageNumber * 10);
             using (var context = GetContext())
             {
                 IQueryable<T> dbQuery = context.Set<T>();
@@ -108,9 +108,9 @@ namespace LCCStores.Logic
                 //Apply eager loading
                 dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include<T, object>(navigationProperty));
 
-               
-                   
-                if(where!=null)
+
+
+                if (where != null)
                 {
                     list = dbQuery.Take(pageNumber)
                    .AsNoTracking().Where<T>(where).ToList<T>();
@@ -118,7 +118,7 @@ namespace LCCStores.Logic
                 }
                 list = dbQuery.Take(pageNumber)
                .AsNoTracking().ToList<T>();
-               
+
             }
             return list;
         }
@@ -160,7 +160,7 @@ namespace LCCStores.Logic
             return item;
         }
 
-     
+
 
         public long GetCount()
         {

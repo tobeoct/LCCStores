@@ -5,7 +5,11 @@
 <div class="jumbotron">
     <h1>ASP.NET</h1>
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <div class=" paystack">
+        <button class="btn btn-success btn-lg" onclick="Pay()">Pay</button>
+        <span id="info"></span>
+    </div>
+   
 </div>
 
 <div class="row">
@@ -28,4 +32,82 @@
         <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
+
+
 </div>
+
+
+@section scripts
+{
+    <script>
+        function Pay() {
+            var fullCart = {
+                Cart: {
+                    Id: 6,
+                    CustomerId: 11,
+                    TotalPrice: 202000.00,
+                    NumberOfProducts: 5,
+                    Customer: {
+                        Id: 11,
+                        FirstName: "Tobechukwu",
+                        LastName: "Onyema",
+                        PersonalInfoId: 19,
+                        BillingInfoId: 7,
+                        PersonalInfo: null,
+                        BillingInfo: null
+                    }
+                },
+                CartItems: [
+                    {
+                        Id: 9,
+                        CartId: 6,
+                        ProductId: 17,
+                        Quantity: 5,
+                        Cart: null,
+                        Product: {
+                            Id: 17,
+                            ProductDetailId: 17,
+                            BrandId: 1,
+                            TaxId: 1,
+                            ProductDetail: {
+                                Id: 28,
+                                Name: "CANON AXLE SERIES 544",
+                                Description: null,
+                                QuantityPerUnit: 1,
+                                UnitPrice: 110000.00,
+                                UnitWeight: 50.00,
+                                UnitInStock: 2,
+                                UnitOnOrder: 1,
+                                Discount: 0.00,
+                                ReOrderLevel: 50
+                            }
+                        }
+                    }
+                ]
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/api/Cart/CheckOutCart',
+                data: JSON.stringify(fullCart),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    //alert(data);
+                    var jsonData = JSON.parse(data);
+                    //alert(JSON.stringify(jsonData));
+                    var url = jsonData.Data;
+                    //alert(JSON.stringify(url));
+                    window.location.replace(url);
+                  //  window.open(url, '_blank');
+
+                },
+                error: function (errorMessage) {
+                    // alert('request failed');
+                    $('#info').html('<p>An error has occurred</p>');
+                }
+
+            });
+
+        }
+    </script>
+}
